@@ -186,7 +186,7 @@ export class AppComponent {
     this.phaseOfH1 = numeric.mul(numeric.atan(img_div_Real), (180 / Math.PI));*/
 
     this.magnitudeOfH1 = this.H1.abs().x.slice(0, (this.NFFT / 2 + 1) );
-    const phaseOfH1_Rad = numeric.atan2(this.H1.x.slice(0, (this.NFFT / 2 + 1) ), this.H1.y.slice(0, (this.NFFT / 2 + 1) ) );
+    const phaseOfH1_Rad = numeric.atan2(this.H1.y.slice(0, (this.NFFT / 2 + 1) ), this.H1.x.slice(0, (this.NFFT / 2 + 1) ) );
     this.phaseOfH1 = numeric.mul(phaseOfH1_Rad, (180 / Math.PI) );
   }
 

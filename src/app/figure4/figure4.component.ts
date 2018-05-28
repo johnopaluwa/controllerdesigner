@@ -54,7 +54,7 @@ export class Figure4Component implements OnChanges {
     polar: {
       radialaxis: {
         visible: true,
-        range: [0, 2]
+        range: [0, 10]
       }
     }
    };
