@@ -1,0 +1,28 @@
+.example-h2 {
+  font-size: 10px;
+}
+
+.example-section {
+  display: flex;
+  align-content: center;
+  align-items: center;
+  height: 60px;
+}
+
+
+
+.mat-slider-horizontal {
+  padding-top: 0px;
+  width: 200px;
+}
+
+.mat-slider-vertical {
+  height: 300px;
+}
+
+.card{
+  float:left
+}
+.cardSlider{
+  float:left;
+}

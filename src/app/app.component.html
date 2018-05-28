@@ -1,20 +1,62 @@
-<!--The content below is only a placeholder and can be replaced.-->
-<div style="text-align:center">
-  <h1>
-    Welcome to {{ title }}!
-  </h1>
-  <img width="300" alt="Angular Logo" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNTAgMjUwIj4KICAgIDxwYXRoIGZpbGw9IiNERDAwMzEiIGQ9Ik0xMjUgMzBMMzEuOSA2My4ybDE0LjIgMTIzLjFMMTI1IDIzMGw3OC45LTQzLjcgMTQuMi0xMjMuMXoiIC8+CiAgICA8cGF0aCBmaWxsPSIjQzMwMDJGIiBkPSJNMTI1IDMwdjIyLjItLjFWMjMwbDc4LjktNDMuNyAxNC4yLTEyMy4xTDEyNSAzMHoiIC8+CiAgICA8cGF0aCAgZmlsbD0iI0ZGRkZGRiIgZD0iTTEyNSA1Mi4xTDY2LjggMTgyLjZoMjEuN2wxMS43LTI5LjJoNDkuNGwxMS43IDI5LjJIMTgzTDEyNSA1Mi4xem0xNyA4My4zaC0zNGwxNy00MC45IDE3IDQwLjl6IiAvPgogIDwvc3ZnPg==">
-</div>
-<h2>Here are some links to help you start: </h2>
-<ul>
-  <li>
-    <h2><a target="_blank" rel="noopener" href="https://angular.io/tutorial">Tour of Heroes</a></h2>
-  </li>
-  <li>
-    <h2><a target="_blank" rel="noopener" href="https://github.com/angular/angular-cli/wiki">CLI Documentation</a></h2>
-  </li>
-  <li>
-    <h2><a target="_blank" rel="noopener" href="https://blog.angular.io/">Angular blog</a></h2>
-  </li>
-</ul>
 
+
+<mat-card class="card" *ngIf="f_vec && S_mag && EQ_mag">
+  <mat-card-content>
+<app-figure1 [f_vec]="f_vec" [S_mag]="S_mag" [EQ_mag]="EQ_mag"></app-figure1>
+  </mat-card-content>
+</mat-card>
+
+<mat-card class="card" *ngIf="f_vec && W1_mag">
+  <mat-card-content>
+<app-figure2 [f_vec]="f_vec" [W1_mag]="W1_mag" ></app-figure2>
+  </mat-card-content>
+</mat-card>
+
+<mat-card class="card" *ngIf="f_vec && H1_Mag">
+  <mat-card-content>
+<app-figure3 [f_vec]="f_vec" [H1_mag]="H1_Mag" ></app-figure3>
+  </mat-card-content>
+</mat-card>
+
+<mat-card class="card" *ngIf="magnitudeOfH1 && phaseOfH1" >
+  <mat-card-content>
+<app-figure4 [magnitudeOfH1]="magnitudeOfH1" [phaseOfH1]="phaseOfH1" ></app-figure4>
+  </mat-card-content>
+</mat-card>
+
+
+<mat-card class="cardSlider" *ngIf="magnitudeOfH1 && phaseOfH1" 
+[ngDraggable]="draggable"
+>
+  <mat-card-content>
+    <h2 class="example-h2">Eq: Fcut <span (click)="toggleDrag()" style="float:right; color:blue; cursor:pointer">toggle drag</span></h2>
+    <mat-slider
+        class="example-margin"
+        [max]="max_eq_fcut"
+        [min]="min_eq_fcut"
+        [(ngModel)]="value_eq_fcut"
+        (input)="fcut_update($event)">
+    </mat-slider>
+  </mat-card-content>
+  <mat-form-field class="example-margin">
+    <input matInput type="number" placeholder="value" [(ngModel)]="value_eq_fcut" (keyup)="fcut_update($event)">
+  </mat-form-field>
+</mat-card>
+
+<mat-card class="cardSlider" *ngIf="magnitudeOfH1 && phaseOfH1" 
+[ngDraggable]="draggable">
+  <mat-card-content>
+    <h2 class="example-h2">W1_g<span (click)="toggleDrag()" style="float:right; color:blue; cursor:pointer">toggle drag</span></h2>
+
+    <mat-slider
+        class="mat-slider-horizontal"
+        [max]="max_w1_g"
+        [min]="min_w1_g"
+        [(ngModel)]="value_w1_g"
+        (input)="w1_g_update($event)">
+    </mat-slider>
+  </mat-card-content>
+  <mat-form-field class="example-margin">
+    <input matInput type="number" placeholder="value_eq_fcut" [(ngModel)]="value_w1_g" (keyup)="w1_g_update($event)">
+  </mat-form-field>
+</mat-card>
