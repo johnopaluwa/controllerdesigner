@@ -1,24 +1,24 @@
 
 
-<mat-card class="card" *ngIf="f_vec && S_mag && EQ_mag">
+<mat-card #mainScreen class="card" *ngIf="f_vec && S_mag && EQ_mag" style="padding:0%">
   <mat-card-content>
 <app-figure1 [f_vec]="f_vec" [S_mag]="S_mag" [EQ_mag]="EQ_mag"></app-figure1>
   </mat-card-content>
 </mat-card>
 
-<mat-card class="card" *ngIf="f_vec && W1_mag">
+<mat-card class="card" *ngIf="f_vec && W1_mag" style="padding:0%">
   <mat-card-content>
 <app-figure2 [f_vec]="f_vec" [W1_mag]="W1_mag" ></app-figure2>
   </mat-card-content>
 </mat-card>
 
-<mat-card class="card" *ngIf="f_vec && H1_Mag">
+<mat-card class="card" *ngIf="f_vec && H1_Mag && maxAmplification" style="padding:0%">
   <mat-card-content>
-<app-figure3 [f_vec]="f_vec" [H1_mag]="H1_Mag" ></app-figure3>
+<app-figure3 [f_vec]="f_vec" [H1_mag]="H1_Mag" [maxAmplification]="maxAmplification" ></app-figure3>
   </mat-card-content>
 </mat-card>
 
-<mat-card class="card" *ngIf="magnitudeOfH1 && phaseOfH1" >
+<mat-card class="card" *ngIf="magnitudeOfH1 && phaseOfH1" style="padding:0%" >
   <mat-card-content>
 <app-figure4 [magnitudeOfH1]="magnitudeOfH1" [phaseOfH1]="phaseOfH1" ></app-figure4>
   </mat-card-content>
@@ -26,27 +26,25 @@
 
 
 <mat-card class="cardSlider" *ngIf="magnitudeOfH1 && phaseOfH1" 
-[ngDraggable]="draggable"
+[ngDraggable]="draggable" style="padding:0.5%"
 >
-  <mat-card-content>
-    <h2 class="example-h2">Eq: Fcut <span (click)="toggleDrag()" style="float:right; color:blue; cursor:pointer">toggle drag</span></h2>
-    <mat-slider
+    <h2 style="margin:0%;" class="example-h2">Eq: Fcut <span (click)="toggleDrag()" style="float:right; color:blue; cursor:pointer">toggle drag</span></h2>
+    <mat-slider 
         class="example-margin"
         [max]="max_eq_fcut"
         [min]="min_eq_fcut"
         [(ngModel)]="value_eq_fcut"
         (input)="fcut_update($event)">
     </mat-slider>
-  </mat-card-content>
-  <mat-form-field class="example-margin">
+  <br>
+  <mat-form-field class="example-margin" >
     <input matInput type="number" placeholder="value" [(ngModel)]="value_eq_fcut" (keyup)="fcut_update($event)">
   </mat-form-field>
 </mat-card>
 
-<mat-card class="cardSlider" *ngIf="magnitudeOfH1 && phaseOfH1" 
+<mat-card class="cardSlider" *ngIf="magnitudeOfH1 && phaseOfH1" style="padding:0.5%"
 [ngDraggable]="draggable">
-  <mat-card-content>
-    <h2 class="example-h2">W1_g<span (click)="toggleDrag()" style="float:right; color:blue; cursor:pointer">toggle drag</span></h2>
+    <h2 style="margin:0%" class="example-h2">W1_g<span (click)="toggleDrag()" style="float:right; color:blue; cursor:pointer">toggle drag</span></h2>
 
     <mat-slider
         class="mat-slider-horizontal"
@@ -55,8 +53,68 @@
         [(ngModel)]="value_w1_g"
         (input)="w1_g_update($event)">
     </mat-slider>
-  </mat-card-content>
+    <br>
   <mat-form-field class="example-margin">
     <input matInput type="number" placeholder="value_eq_fcut" [(ngModel)]="value_w1_g" (keyup)="w1_g_update($event)">
   </mat-form-field>
 </mat-card>
+
+<mat-card class="cardSlider" *ngIf="magnitudeOfH1 && phaseOfH1" style="padding:0.5%"
+[ngDraggable]="draggable">
+    <h2 style="margin:0%" class="example-h2">W_m(Upper bound)<span (click)="toggleDrag()" style="float:right; color:blue; cursor:pointer">toggle drag</span></h2>
+
+    <mat-slider
+        class="mat-slider-horizontal"
+        [max]="max_W_m"
+        [min]="min_W_m"
+        [step] = "step_min_W_m"
+        [(ngModel)]="value_W_m"
+        (input)="update_isInstabilty($event)">
+    </mat-slider>
+    <br>
+  <mat-form-field class="example-margin">
+    <input matInput type="number" placeholder="value_W_m" [(ngModel)]="value_W_m" (keyup)="update_isInstabilty($event)">
+  </mat-form-field>
+</mat-card>
+
+<mat-card class="cardSlider" *ngIf="magnitudeOfH1 && phaseOfH1" style="padding:0.5%"
+[ngDraggable]="draggable">
+    <h2 style="margin:0%" class="example-h2">circle radius around nyquist<span (click)="toggleDrag()" style="float:right; color:blue; cursor:pointer">toggle drag</span></h2>
+
+    <mat-slider
+        class="mat-slider-horizontal"
+        [max]="max_nyquistRadius"
+        [min]="min_nyquistRadius"
+        [step] = "step_nyquistRadius"
+        [(ngModel)]="value_nyquistRadius"
+        (input)="isGreaterThanAmp($event)">
+    </mat-slider>
+    <br>
+  <mat-form-field class="example-margin">
+    <input matInput type="number" placeholder="radius" [(ngModel)]="value_nyquistRadius" (keyup)="isGreaterThanAmp($event)">
+  </mat-form-field>
+  <div class="example-margin" >Max Amplification: {{maxAmplification}}</div>
+</mat-card>
+
+<mat-card class="cardSlider" *ngIf="magnitudeOfH1 && phaseOfH1" style="padding:0.5%"
+[ngDraggable]="draggable">
+<mat-card-content  *ngIf="isInstability" style=" height: 17vh; background-color:red">
+  <h3>System is unstable</h3>
+</mat-card-content>
+<mat-card-content  *ngIf="!isInstability" style=" height: 17vh; background-color:blue">
+  <h3>System is stable</h3>
+</mat-card-content>
+</mat-card>
+
+
+<mat-card class="cardSlider" *ngIf="magnitudeOfH1 && phaseOfH1" style="padding:0.5%"
+[ngDraggable]="draggable">
+<mat-card-content  *ngIf="isItGreaterThanAmp" style=" height: 17vh; background-color:red">
+  <h3>Maximum Amplification exceeded</h3>
+</mat-card-content>
+<mat-card-content  *ngIf="!isItGreaterThanAmp" style=" height: 17vh; background-color:blue">
+  <h3>Amplification not exceeded</h3>
+</mat-card-content>
+</mat-card>
+
+

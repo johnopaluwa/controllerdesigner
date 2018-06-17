@@ -18,7 +18,7 @@ export class Figure4Component implements OnChanges {
   ngOnChanges() {
     // console.log(this.phaseOfH1)
     const WIDTH_IN_PERCENT_OF_PARENT = 45;
-    const HEIGHT_IN_PERCENT_OF_PARENT = 45;
+    const HEIGHT_IN_PERCENT_OF_PARENT = 40;
     const d3 = Plotly.d3;
     const gd3 = d3.select('#myDiv3')
     .style({
@@ -46,6 +46,12 @@ export class Figure4Component implements OnChanges {
 
    const layout = {
     title: 'Plot plot ',
+    margin: {
+      t: 40,
+      l: 20,
+      r: 40,
+      b: 20
+    },
     titlefont: {
       family: 'Courier New, monospace',
       size: 13,
@@ -54,7 +60,7 @@ export class Figure4Component implements OnChanges {
     polar: {
       radialaxis: {
         visible: true,
-        range: [0, 10]
+        range: [0, 5]
       }
     }
    };

@@ -11,12 +11,13 @@ declare var Plotly: any;
 export class Figure3Component implements OnChanges {
   @Input() f_vec: any;
   @Input() H1_mag: any;
+  @Input() maxAmplification: any;
 
   constructor() {}
 
   ngOnChanges() {
     const WIDTH_IN_PERCENT_OF_PARENT = 45;
-    const HEIGHT_IN_PERCENT_OF_PARENT = 45;
+    const HEIGHT_IN_PERCENT_OF_PARENT = 40;
     const d3 = Plotly.d3;
     const gd3 = d3.select('#myDiv2')
     .style({
@@ -55,7 +56,25 @@ const layout = {
   yaxis: {
     title: 'H1_mag',
     range: [-60, 30]
-  }
+  },
+  margin: {
+    t: 40,
+    l: 40,
+    r: 40,
+    b: 40
+  },
+  shapes:  [{
+        'type': 'line',
+        'x0': 0,
+        'y0': this.maxAmplification,
+        'x1': 10000,
+        'y1': this.maxAmplification,
+        'line': {
+            'color': 'rgb(50, 171, 96)',
+            'width': 1,
+            'dash': 'dashdot',
+        },
+    }]
 };
 
 Plotly.react(gd, data, layout);

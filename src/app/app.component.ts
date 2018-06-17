@@ -47,6 +47,14 @@ export class AppComponent {
   H1: any;
   H1_Mag: any;
 
+  T1: any;
+  T1_Mag: any;
+  W_mMul_T1_Abs: any; // note do actual calculation with given values to get W_mMul_T1_Abs(0 is an assumed value)
+  isInstability = false;
+
+  isItGreaterThanAmp = false;
+  maxAmplification: any;
+
   // slider variables
 
   max_eq_fcut = 20000;
@@ -57,12 +65,23 @@ export class AppComponent {
   min_w1_g = 1;
   value_w1_g = 1;
 
+  max_W_m = 1;
+  min_W_m = 0;
+  value_W_m = 0.1;
+  step_min_W_m = 0.1;
+
+  max_nyquistRadius = 1;
+  min_nyquistRadius = 0.1;
+  value_nyquistRadius = 0.3;
+  step_nyquistRadius = 0.1;
+
   // polar plot
   magnitudeOfH1: any;
   phaseOfH1: any;
 
   // draggble
-  draggable = true;
+  draggable = false;
+
 
   constructor(private _DataService: DataService, private _Iir2ndOrderConjCmplxService: Iir2ndOrderConjCmplxService,
     private _ShelvingCutService: ShelvingCutService ) {
@@ -106,6 +125,8 @@ export class AppComponent {
     this.update_W1_Mag();
     this.update_h1_tf();
     this.update_Polar_Plot();
+    this.update_isInstabilty(3); // 3 is used just toshow typeOf is number
+    this.isGreaterThanAmp(3); // 3 is used just toshow typeOf is number
   }
 
   fcut_update (event: any) {
@@ -114,11 +135,15 @@ export class AppComponent {
       this.update_Eq_Mag();
       this.update_h1_tf();
       this.update_Polar_Plot();
+      this.update_isInstabilty(3); // 3 is used just toshow typeOf is number
+      this.isGreaterThanAmp(3); // 3 is used just toshow typeOf is number
     } else {
       this.fc = event.target.value;
       this.update_Eq_Mag();
       this.update_h1_tf();
       this.update_Polar_Plot();
+      this.update_isInstabilty(3); // 3 is used just toshow typeOf is number
+      this.isGreaterThanAmp(3); // 3 is used just toshow typeOf is number
     }
   }
 
@@ -128,11 +153,15 @@ export class AppComponent {
       this.update_W1_Mag();
       this.update_h1_tf();
       this.update_Polar_Plot();
+      this.update_isInstabilty(3); // 3 is used just toshow typeOf is number
+      this.isGreaterThanAmp(3); // 3 is used just toshow typeOf is number
   } else {
       this.g = event.target.value;
       this.update_W1_Mag();
       this.update_h1_tf();
       this.update_Polar_Plot();
+      this.update_isInstabilty(3); // 3 is used just toshow typeOf is number
+      this.isGreaterThanAmp(3); // 3 is used just toshow typeOf is number
     }
   }
 
@@ -185,10 +214,81 @@ export class AppComponent {
     // calulate phase of H1
     this.phaseOfH1 = numeric.mul(numeric.atan(img_div_Real), (180 / Math.PI));*/
 
-    this.magnitudeOfH1 = this.H1.abs().x.slice(0, (this.NFFT / 2 + 1) );
-    const phaseOfH1_Rad = numeric.atan2(this.H1.y.slice(0, (this.NFFT / 2 + 1) ), this.H1.x.slice(0, (this.NFFT / 2 + 1) ) );
+    // tell piero about the change from close loop tfto open loop tf.
+    // then change magnitudeOfH1 and phaseOfH1 to magnitudeOfW1_S and phaseOfW1_S
+    this.magnitudeOfH1 = this.W1_S.abs().x.slice(0, (this.NFFT / 2 + 1) );
+    const phaseOfH1_Rad = numeric.atan2(this.W1_S.y.slice(0, (this.NFFT / 2 + 1) ), this.W1_S.x.slice(0, (this.NFFT / 2 + 1) ) );
     this.phaseOfH1 = numeric.mul(phaseOfH1_Rad, (180 / Math.PI) );
   }
+
+  update_isInstabilty(event: any) {
+    if (typeof event === 'number') {
+      this.T1 = (this.H1.mul(-1)).add(1);
+      const W_mMul_T1 = this.T1.mul(this.value_W_m);
+      this.W_mMul_T1_Abs = W_mMul_T1.abs().x.slice(0, (this.NFFT / 2 + 1));
+  } else if (event.value !== undefined) {
+        this.value_W_m = event.value;
+        this.T1 = (this.H1.mul(-1)).add(1);
+        const W_mMul_T1 = this.T1.mul(this.value_W_m);
+        this.W_mMul_T1_Abs = W_mMul_T1.abs().x.slice(0, (this.NFFT / 2 + 1));
+    } else {
+        this.value_W_m = event.target.value;
+        this.T1 = (this.H1.mul(-1)).add(1);
+        const W_mMul_T1 = this.T1.mul(this.value_W_m);
+        this.W_mMul_T1_Abs = W_mMul_T1.abs().x.slice(0, (this.NFFT / 2 + 1));
+    }
+   // console.log(this.W_mMul_T1_Abs);
+    this.check_isInstabilty();
+}
+
+check_isInstabilty() {
+    if (this.W_mMul_T1_Abs < 1) {
+        this.isInstability = false;
+    } else {
+        this.isInstability = true;
+    }
+
+    let temp;
+    this.W_mMul_T1_Abs.find(element => {
+      if (element >= 1 ) {
+        return temp = true;
+      } else {
+        temp = false;
+      }
+    });
+
+    this.isInstability = temp;
+}
+
+isGreaterThanAmp(event: any) {
+  if (typeof event === 'number') {
+
+  } else if (event.value !== undefined) {
+      this.value_nyquistRadius = event.value;
+  } else {
+      this.value_nyquistRadius = event.target.value;
+  }
+
+  this.calculateMaxAmplification(this.value_nyquistRadius);
+
+  let temp;
+  this.H1_Mag.find(element => {
+    if (element >= this.maxAmplification ) {
+      return temp = true;
+    } else {
+      temp = false;
+    }
+  });
+
+  this.isItGreaterThanAmp = temp;
+}
+
+calculateMaxAmplification(radius) {
+  const a3 = 1 / radius;
+  const m = 1 / 6; // (a1 -a2)/(b1 - b2) = (2 - 1)/(6 - 0)
+  const amp = 6 - ((2 - a3) / m );
+  this.maxAmplification = amp;
+}
 
   toggleDrag() {
     if (this.draggable === true) {

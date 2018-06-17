@@ -16,7 +16,7 @@ export class Figure2Component implements OnChanges {
 
   ngOnChanges() {
     const WIDTH_IN_PERCENT_OF_PARENT = 45;
-    const HEIGHT_IN_PERCENT_OF_PARENT = 45;
+    const HEIGHT_IN_PERCENT_OF_PARENT = 40;
     const d3 = Plotly.d3;
     const gd3 = d3.select('#myDiv1')
     .style({
@@ -42,6 +42,12 @@ export class Figure2Component implements OnChanges {
 
   const layout = {
     title: 'Plot of f_vec against W1_mag ',
+    margin: {
+      t: 40,
+      l: 40,
+      r: 40,
+      b: 40
+    },
     titlefont: {
       family: 'Courier New, monospace',
       size: 13,
